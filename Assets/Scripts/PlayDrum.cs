@@ -5,15 +5,14 @@ using UnityEngine;
 public class PlayDrum : MonoBehaviour
 {
     AudioSource drumAudio;
-    // Start is called before the first frame update
-    public enum DrumType{
-        Top = 1, Left = 2, Bottom = 3, Right = 4
-    }
+    bool inputMutex = false;
     
     public DrumType thisDrumType;
 
     GameObject gameMaster;
     DrumInputManager drumInputManager;
+
+    float timeTracker = 0f;
 
     void Start(){
         gameMaster = GameObject.FindWithTag("GameMaster");
@@ -23,12 +22,29 @@ public class PlayDrum : MonoBehaviour
 
     // Update is called once per frame
     void Update(){
-        //Debug.Log(drumInputManager.name);
+        if(inputMutex){
+            timeTracker += Time.deltaTime;
+            if(timeTracker >= 0.2f){
+                inputMutex = false;
+                timeTracker = 0f;
+            }
+        }
     }
 
-    private void OnCollisionEnter(Collision other) {
-        drumAudio.volume = other.relativeVelocity.magnitude;
-        drumAudio.Play();    
+    
+    private void OnCollisionExit(Collision other){
+        if(!inputMutex){
+            inputMutex = true;
+            drumAudio.volume = other.relativeVelocity.magnitude;
+            drumAudio.Play();   
+            FillDrumInput();
+        }    
     }
+
+    public void FillDrumInput(){
+        drumInputManager.fillDrumInput(this.thisDrumType);
+    }
+
+    
     
 }

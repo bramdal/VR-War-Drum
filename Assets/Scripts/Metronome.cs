@@ -28,9 +28,9 @@ public class Metronome : MonoBehaviour
         sampleRate = AudioSettings.outputSampleRate;
         nextTick = startTick * sampleRate;
         running = true;
-        kickAudioSource = GetComponent<AudioSource>();
+        //kickAudioSource = GetComponent<AudioSource>();
 
-        metronomeTickNotifierDelegate += metronomeTickEvent;
+        // metronomeTickNotifierDelegate += metronomeTickEvent;
     }
 
     void OnAudioFilterRead(float[] data, int channels)
@@ -70,11 +70,11 @@ public class Metronome : MonoBehaviour
         }
     }
 
-    void metronomeTickEvent()
-    {
-        Debug.Log("Play Audio Here");
-        kickAudioSource.Play();
-    }
+    // void metronomeTickEvent()
+    // {
+    //     Debug.Log("Play Audio Here");
+    //     kickAudioSource.Play();
+    // }
 
     private void Update() {
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,20 +7,24 @@ public class DrumInputManager : MonoBehaviour
 {
     MetronomeSimple metronome;
 
-    int[] drumInputArray = {0,0,0,0};
-    // Start is called before the first frame update
+    //int[] drumInputArray = {0,0,0,0};
+    public DrumType[] drumInputArray = new DrumType[4];
+
+    public CommandList commandList;
+    
+    //audio clips for reaction
+    [SerializeField]
+    AudioSource[] hitReactionAudioArray = new AudioSource[5];
+    [SerializeField]
+    GameObject AudioCollection;
     void Start()
     {
         metronome = GetComponent<MetronomeSimple>();
+        hitReactionAudioArray = AudioCollection.GetComponents<AudioSource>();
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public bool fillDrumInput(int drumType){
+    public bool fillDrumInput(DrumType drumType){
         if(metronome.timingWindowEnabled){
 
             for(int i = 0; i < drumInputArray.Length; i++)
@@ -30,28 +35,7 @@ public class DrumInputManager : MonoBehaviour
                 //Notify command digestor here
                 cleanInputArray();
             }
-            int c = metronome.getInputQuality();
-            // switch(c){
-            //     case -2:
-            //         //logic
-            //         break;
-            //     case -1:
-            //         //logic
-            //         break;
-            //     case 0:
-            //         //logic
-            //         break;
-            //     case 1:
-            //         //logic
-            //         break;
-            //     case 2:
-            //         //logic
-            //         break;
-            //     default:
-            //         //logic
-            //         break;
-            // }
-            
+            PlayAudioReaction(metronome.getInputQuality());
             return true;
         }    
         cleanInputArray();
@@ -60,7 +44,11 @@ public class DrumInputManager : MonoBehaviour
 
     void cleanInputArray(){
         for(int i = 0; i < drumInputArray.Length; i++)
-            drumInputArray[i] = 0;
+            drumInputArray[i] = DrumType.Empty;
     }
     
+    void PlayAudioReaction(InputQualityCategory c){
+        if(c != InputQualityCategory.Invalid)
+            hitReactionAudioArray[(int)c + 2].Play();
+    }
 }
