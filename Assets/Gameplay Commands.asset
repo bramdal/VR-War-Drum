@@ -14,4 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   commands:
   - name: Move
-    inputs: 01000000020000000300000004000000
+    inputs: 02000000010000000200000001000000
+  - name: Validate
+    inputs: 01000000010000000100000001000000
+  - name: Dance
+    inputs: 02000000020000000200000002000000

@@ -26,13 +26,13 @@ public class DrumInputManager : MonoBehaviour
 
     public bool fillDrumInput(DrumType drumType){
         if(metronome.timingWindowEnabled){
-
             for(int i = 0; i < drumInputArray.Length; i++)
-                if (drumInputArray[i] == 0)
+                if (drumInputArray[i] == DrumType.Empty)
                     drumInputArray[i] = drumType;
 
-            if(drumInputArray[drumInputArray.Length - 1] != 0 ){
+            if(drumInputArray[drumInputArray.Length - 1] != DrumType.Empty){
                 //Notify command digestor here
+                ExecuteCommand();
                 cleanInputArray();
             }
             PlayAudioReaction(metronome.getInputQuality());
@@ -51,4 +51,35 @@ public class DrumInputManager : MonoBehaviour
         if(c != InputQualityCategory.Invalid)
             hitReactionAudioArray[(int)c + 2].Play();
     }
+
+    void ExecuteCommand(){
+        
+        CommandList.Command thisCommand;
+        thisCommand = SearchCommands();
+        Debug.Log(thisCommand.name);
+        //get reference of actor(s)
+        //get actor(s) to execute
+    }
+
+    CommandList.Command SearchCommands(){
+        int validity = 0;
+        foreach (var command in commandList.commands){
+            for(int i = 0; i < drumInputArray.Length; i++){
+                if(drumInputArray[i] == command.inputs[i])
+                    validity++;
+                else{
+                    validity = 0;
+                    break;
+                }
+                if (validity == 4){
+                    return command;
+                }    
+            }
+        }
+        CommandList.Command invalidCommand = new CommandList.Command();
+        invalidCommand.name = "invalid command";
+        return invalidCommand;
+    }
+        
 }
+

@@ -7,8 +7,8 @@ public class CommandList : ScriptableObject
 {
     [System.Serializable] 
     public class Command{
-       public string name;
-       public DrumType[] inputs = new DrumType[4];
+        public string name;
+        public DrumType[] inputs = new DrumType[4];
     }
 
     
